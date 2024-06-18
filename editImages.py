@@ -64,17 +64,23 @@ def editAPI(Token:str, pageTitle:str, newText:str, summery: str) -> bool:
     
     params = {
         "action": "edit",
-        "title": pageTitle,
+        "title": pageTitle, # Title of the page to edit.
+        "nocreate":"true", # If the page doesn't exist, throw an error
         "section": "0",  # Section number (0 for the whole page)
         "text": newText,  # The new content to be added to the page
         "token": Token,  # Edit token required for editing. (get the from logIn method)
         "format": "json",
-        "bot": "false",
-        "minor": "true",
-        "summary": summery
+        "bot": "true", # Edit is marked as a bot (wont show up in the timeline. I think.)
+        "minor": "true", # Marks the edit as minor
+        "summary": summery # Summery of the edit
     }
 
     response = requests.post(URL, data=params)
+    
+    if(response["result"] == "Success"):
+        return
+    else:
+        print(f"editAPI.ERROR: {response["error"]}")
 
 def logIn() -> tuple[bool, str]:
 
@@ -86,8 +92,8 @@ def logIn() -> tuple[bool, str]:
         'format':"json"
     }
 
-    R = SESSION.get(url=URL, params=PARAMS_0)
-    DATA = R.json()
+    response = SESSION.get(url=URL, params=PARAMS_0)
+    DATA = response.json()
 
     LOGIN_TOKEN = DATA['query']['tokens']['logintoken']
 
@@ -110,8 +116,8 @@ def logIn() -> tuple[bool, str]:
         username = str(random.random() * random.randint(1,10000000))
         password = str(random.random() * random.randint(1,10000000))
 
-    R = SESSION.post(URL, data=PARAMS_1)
-    DATA = R.json()
+    response = SESSION.post(URL, data=PARAMS_1)
+    DATA = response.json()
 
     result = DATA["login"]["result"]
 
@@ -125,8 +131,8 @@ def logIn() -> tuple[bool, str]:
             "format":"json"
         }
 
-        R = SESSION.get(url=URL, params=PARAMS_2)
-        DATA = R.json()
+        response = SESSION.get(url=URL, params=PARAMS_2)
+        DATA = response.json()
 
         CSRF_TOKEN = DATA['query']['tokens']['csrftoken']
 

@@ -37,8 +37,10 @@ def get_all_images():
         "list": "allimages",
         "ailimit": MAX_IMAGES if MAX_IMAGES > 0 else "max"  # Set maximum limit to retrieve all images or MAX_IMAGES
     }
+    
+    running = True
 
-    while True:
+    while running:
         R = SESSION.get(url=URL, params=PARAMS)
         DATA = R.json()
 
@@ -50,10 +52,11 @@ def get_all_images():
 
             all_images.extend(newImages)
 
-            if 'continue' in DATA and MAX_IMAGES < 0:  # Continue fetching if there are more images and MAX_IMAGES is not set
+            # Continue fetching if there are more images and MAX_IMAGES is not set
+            if ('continue' in DATA and MAX_IMAGES < 0):  
                 PARAMS.update(DATA['continue'])
             else:
-                break
+                running = False
 
     return all_images
 
@@ -68,8 +71,8 @@ def get_page_info(page_titles:str):
         "explaintext": True
     }
 
-    R = SESSION.get(url=URL, params=PARAMS)
-    DATA = R.json()
+    response = SESSION.get(url=URL, params=PARAMS)
+    DATA = response.json()
 
     # Extract page content from the response
     page_info = next(iter(DATA["query"]["pages"].values()), None)

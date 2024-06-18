@@ -1,9 +1,11 @@
 from editImages import editAPI, logIn, logout, readFile, SAVE_FILE, CONFIRMED_KEY
 
-# This Script carries out the edit after its been conferred. Its likely to take a long time as 
-# I don't know how to do edit calls in bulk.
+# This Script carries out the edit after its been conferred. 
+# Its likely to take a long time as I don't know how to do edit calls in bulk.
 
-# If your trying to repurpose this script, modify the 3rd parameter for editAPI to match what your doing
+# If your trying to repurpose this script, modify the 3rd parameter for editAPI 
+# to match what your doing.
+# Additionally you will want to take a look at editAPI() and modify it as needed.
 
 if (__name__ == "__main__"):
     didLoginPass, LoginKey = logIn()
